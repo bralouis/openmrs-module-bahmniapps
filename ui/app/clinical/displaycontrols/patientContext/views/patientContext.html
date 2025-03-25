@@ -9,9 +9,15 @@
                 <span class="patient-name">
                     ({{patientContext.identifier}})
                 </span>
-                <span class="custom-attr-icon" ng-if="showIcon">
-                    <i class="ipd-indication context-icon-style" ng-class="iconAttributeConfig.icon" ng-style="{{iconAttributeConfig.iconStyle}}"></i>
-                </span>
+                <span ng-if="percentageSpent >= 75">
+                    <img class="patient-image" ng-src='../images/red.png' fallback-src='../images/red.png'> 
+                 </span>
+                 <span ng-if="percentageSpent > 50 && percentageSpent < 75">
+                     <img class="patient-image" ng-src='../images/yellow.png' fallback-src='../images/yellow.png'> 
+                  </span>
+                  <span ng-if="percentageSpent <= 50">
+                     <img class="patient-image" ng-src='../images/green.png' fallback-src='../images/green.png'> 
+                  </span> 
             </li>
             <li>{{patientContext.gender}}</li>
             <li>{{patientContext.birthdate | birthDateToAgeText}}</li>

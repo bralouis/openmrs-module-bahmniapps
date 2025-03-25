@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('bahmni.clinical')
-    .directive('patientContext', ['$state', '$translate', '$sce', 'patientService', 'spinner', 'appService', function ($state, $translate, $sce, patientService, spinner, appService) {
+    .directive('patientContext', ['$state', '$translate', '$sce', 'patientService', 'spinner', 'appService', '$q', '$http', function ($state, $translate, $sce, patientService, spinner, appService, $q, $http) {
         var controller = function ($scope, $rootScope) {
             var patientContextConfig = appService.getAppDescriptor().getConfigValue('patientContext') || {};
             $scope.initPromise = patientService.getPatientContext($scope.patient.uuid, $state.params.enrollment, patientContextConfig.personAttributes, patientContextConfig.programAttributes, patientContextConfig.additionalPatientIdentifiers);
@@ -35,6 +35,34 @@ angular.module('bahmni.clinical')
                     $scope.patientContext.image = Bahmni.Common.Constants.patientImageUrlByPatientUuid + $scope.patientContext.uuid;
                 }
                 $scope.patientContext.gender = $rootScope.genderMap[$scope.patientContext.gender];
+                var patidentifier = "MOM314130";
+                $scope.percentageSpent = 0;
+                var getPatientWalletInfo = function () {
+                    var params = {
+                        // eslint-disable-next-line key-spacing
+                        identifier : $scope.patient.identifier
+                        // identifier: patidentifier
+                    };
+                    return $http.get('/openmrs/ws/rest/v1/odooconnector/patient-balance', {
+                        method: "GET",
+                        params: params,
+                        withCredentials: true
+                    });
+                };
+                $q.all([getPatientWalletInfo()]).then(function (response) {
+                    $scope.balanceInfo = response[0].data;
+                    if (($scope.balanceInfo.balance != null) && ($scope.balanceInfo.max_top_up != null)) {
+                        $scope.accountBalance = $scope.balanceInfo.balance;
+                        $scope.accountStatus = 'Active';
+                        $scope.expenditure = (($scope.balanceInfo.balance / $scope.balanceInfo.max_top_up) * 100).toFixed(1);
+                        $scope.percentageSpent = (100 - $scope.expenditure);
+                        console.log("Account Balance", $scope.accountBalance);
+                        console.log("Percentage spent", $scope.percentageSpent);
+                    } else {
+                        $scope.accountBalance = '0.00';
+                        $scope.accountStatus = 'Dormant';
+                    }
+                });
             });
 
             $scope.navigate = function () {
