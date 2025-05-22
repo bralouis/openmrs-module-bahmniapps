@@ -35,7 +35,7 @@ angular.module('bahmni.clinical')
                     $scope.patientContext.image = Bahmni.Common.Constants.patientImageUrlByPatientUuid + $scope.patientContext.uuid;
                 }
                 $scope.patientContext.gender = $rootScope.genderMap[$scope.patientContext.gender];
-                var patidentifier = "MOM314130";
+                // var patidentifier = "MOM5";
                 $scope.percentageSpent = 0;
                 var getPatientWalletInfo = function () {
                     var params = {
@@ -43,7 +43,7 @@ angular.module('bahmni.clinical')
                         identifier : $scope.patient.identifier
                         // identifier: patidentifier
                     };
-                    return $http.get('/openmrs/ws/rest/v1/odooconnector/patient-balance', {
+                    return $http.get('/openmrs/ws/rest/v1/odooconnector/patient-balance-direct', {
                         method: "GET",
                         params: params,
                         withCredentials: true
@@ -51,13 +51,14 @@ angular.module('bahmni.clinical')
                 };
                 $q.all([getPatientWalletInfo()]).then(function (response) {
                     $scope.balanceInfo = response[0].data;
+                    // console.log("This is the balance:", $scope.balanceInfo);
                     if (($scope.balanceInfo.balance != null) && ($scope.balanceInfo.max_top_up != null)) {
                         $scope.accountBalance = $scope.balanceInfo.balance;
                         $scope.accountStatus = 'Active';
                         $scope.expenditure = (($scope.balanceInfo.balance / $scope.balanceInfo.max_top_up) * 100).toFixed(1);
                         $scope.percentageSpent = (100 - $scope.expenditure);
-                        console.log("Account Balance", $scope.accountBalance);
-                        console.log("Percentage spent", $scope.percentageSpent);
+                        // console.log("Account Balance", $scope.accountBalance);
+                        // console.log("Percentage spent", $scope.percentageSpent);
                     } else {
                         $scope.accountBalance = '0.00';
                         $scope.accountStatus = 'Dormant';
