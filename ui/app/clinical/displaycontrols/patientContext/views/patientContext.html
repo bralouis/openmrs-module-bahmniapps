@@ -9,7 +9,7 @@
                 <span class="patient-name">
                     ({{patientContext.identifier}})
                 </span>
-                <span ng-if="percentageSpent >= 75">
+                <span ng-if="percentageSpent >= 75 || accountBalance == 0">
                     <img class="patient-image" ng-src='../images/red.png' fallback-src='../images/red.png'> 
                  </span>
                  <span ng-if="percentageSpent > 50 && percentageSpent < 75">
