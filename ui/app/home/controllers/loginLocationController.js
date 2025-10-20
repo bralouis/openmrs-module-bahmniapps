@@ -86,7 +86,10 @@ angular.module('bahmni.home')
                 });
             });
 
-            var getLoginLocationUuid = function () { return $bahmniCookieStore.get(Bahmni.Common.Constants.locationCookieName) ? $bahmniCookieStore.get(Bahmni.Common.Constants.locationCookieName).uuid : null; };
+            var getLoginLocationUuid = function () {
+                return $bahmniCookieStore.get(Bahmni.Common.Constants.locationCookieName) ?
+                $bahmniCookieStore.get(Bahmni.Common.Constants.locationCookieName).uuid : null;
+            };
 
             var getLastLoggedinLocation = function () {
                 return _.find(initialData.locations, function (location) {
@@ -111,35 +114,73 @@ angular.module('bahmni.home')
             if ($location.path() === loginPagePath) {
                 redirectToLandingPageIfAlreadyAuthenticated();
             }
+
             var onSuccessfulAuthentication = function () {
                 $scope.loginInfo.currentLocation = getLastLoggedinLocation();
                 $rootScope.$broadcast('event:auth-loggedin');
             };
 
+            // -------------------------
+            // 🚨 Privilege Check Function
+            // -------------------------
+            var ensureLoginLocationPrivilege = function (currentUser, selectedLocation) {
+                if (!currentUser || !currentUser.privileges || !selectedLocation) return false;
+
+                var locationName = selectedLocation.name || selectedLocation.display;
+                if (!locationName) return false;
+
+                var requiredPrivilege = "Access Location - " + locationName;
+
+                var hasPrivilege = currentUser.privileges.some(function (privilege) {
+                    return privilege.name === requiredPrivilege;
+                });
+
+                if (!hasPrivilege) {
+                    console.error("Missing privilege: " + requiredPrivilege);
+                }
+
+                return hasPrivilege;
+            };
+
+            // -------------------------
+            // 🧠 Modified updateSessionLocation
+            // -------------------------
             $scope.updateSessionLocation = function () {
                 $scope.errorMessageTranslateKey = null;
                 var deferrable = $q.defer();
 
-                sessionService.updateSession($scope.loginInfo.currentLocation, null).then(function () {
-                    sessionService.loadCredentials().then(function () {
-                        onSuccessfulAuthentication();
-                        userService.savePreferences().then(
-                            function () { deferrable.resolve(); },
-                            function (error) { deferrable.reject(error); }
-                        );
-                        logAuditForLoginAttempts("USER_LOGIN_LOCATION_SUCCESS");
-                    }, function (error) {
-                        $scope.errorMessageTranslateKey = error;
-                        deferrable.reject(error);
+                sessionService.loadCredentials().then(function () {
+                    var currentUser = $rootScope.currentUser;
+                    var selectedLocation = $scope.loginInfo.currentLocation;
+
+                    // ✅ Check if user has privilege to access this location
+                    if (!ensureLoginLocationPrivilege(currentUser, selectedLocation)) {
+                        $scope.errorMessageTranslateKey = "You do not have privilege to access this location.";
                         logAuditForLoginAttempts("USER_LOGIN_LOCATION_FAILED", true);
+                        deferrable.reject("Unauthorized location access");
+                        return;
+                    }
+
+                    // Proceed with normal flow
+                    sessionService.updateSession(selectedLocation, null).then(function () {
+                        sessionService.loadCredentials().then(function () {
+                            onSuccessfulAuthentication();
+                            userService.savePreferences().then(
+                                function () { deferrable.resolve(); },
+                                function (error) { deferrable.reject(error); }
+                            );
+                            logAuditForLoginAttempts("USER_LOGIN_LOCATION_SUCCESS");
+                        }, function (error) {
+                            $scope.errorMessageTranslateKey = error;
+                            deferrable.reject(error);
+                            logAuditForLoginAttempts("USER_LOGIN_LOCATION_FAILED", true);
+                        });
                     });
                 });
 
-                spinner.forPromise(deferrable.promise).then(
-                    function (data) {
-                        if (data) return;
-                        $location.url(landingPagePath);
-                    }
-                );
+                spinner.forPromise(deferrable.promise).then(function (data) {
+                    if (data) return;
+                    $location.url(landingPagePath);
+                });
             };
         }]);
