@@ -3,7 +3,7 @@
         <div class="reg-header-right fr">
             <form class="change-location fl">
                 <select  ng-model="selectedLocationUuid" ng-change="onLocationChange()">
-                    <option ng-repeat="location in locations | orderBy:'display'" ng-selected="isCurrentLocation(location)" value="{{location.uuid}}">
+                    <option ng-repeat="location in locations | orderBy:'display'" ng-selected="isCurrentLocation(location)" value="{{location.uuid}}" ng-disabled={{!hasChangeLocationPermission}}>
                         {{location.display | translate}}
                     </option>
                 </select>

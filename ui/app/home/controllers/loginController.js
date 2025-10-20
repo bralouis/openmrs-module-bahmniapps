@@ -157,6 +157,20 @@ angular.module('bahmni.home')
                     });
                 };
 
+                var ensureLoginLocation = function (currentUser, selectedLocation) {
+                    // Check the user privileges for the selected login location and either login when found or logout when not found
+                    let hasLocation = false;
+                    if (currentUser['privileges']) {
+                        for (let i = 0; i < currentUser['privileges'].length; i++) {
+                            if (currentUser['privileges'][i]['name'] === selectedLocation) {
+                                hasLocation = true;
+                                break;
+                            }
+                        }
+                    }
+                    return hasLocation;
+                };
+
                 sessionService.loginUser($scope.loginInfo.username, $scope.loginInfo.password, $scope.loginInfo.currentLocation, $scope.loginInfo.otp).then(
                     function (data) {
                         ensureNoSessionIdInRoot();
@@ -172,7 +186,15 @@ angular.module('bahmni.home')
                                     function () { deferrable.resolve(); },
                                     function (error) { deferrable.reject(error); }
                                 );
-                            logAuditForLoginAttempts("USER_LOGIN_SUCCESS");
+                                if (ensureLoginLocation($rootScope.currentUser, $scope.loginInfo.currentLocation['name'])) {
+                                    logAuditForLoginAttempts("USER_LOGIN_SUCCESS");
+                                } else {
+                                    var errorText = "You do not have permission to access this location";
+                                    $scope.errorMessageTranslateKey = errorText;
+                                    deleteUserCredentialsAndShowLoginPage();
+                                    deferrable.reject(errorText);
+                                    logAuditForLoginAttempts("USER_LOGIN_FAILED", true);
+                                }
                             if (data) {
                                 const providerUuid = data.currentProvider.uuid;
                                 if ($bahmniCookieStore.get(providerUuid) !== null) {
