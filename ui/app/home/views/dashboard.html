@@ -2,8 +2,12 @@
     <header class="reg-header">
         <div class="reg-header-right fr">
             <form class="change-location fl">
-                <select  ng-model="selectedLocationUuid" ng-change="onLocationChange()">
-                    <option ng-repeat="location in locations | orderBy:'display'" ng-selected="isCurrentLocation(location)" value="{{location.uuid}}">
+                <select ng-model="selectedLocationUuid"
+                        ng-disabled="true"
+                        style="pointer-events: none; background-color: #f5f5f5; color: #666;">
+                    <option ng-repeat="location in locations | orderBy:'display'"
+                            ng-selected="isCurrentLocation(location)"
+                            value="{{location.uuid}}">
                         {{location.display | translate}}
                     </option>
                 </select>
