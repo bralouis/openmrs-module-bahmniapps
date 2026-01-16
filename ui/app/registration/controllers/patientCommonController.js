@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('bahmni.registration')
-    .controller('PatientCommonController', ['$scope', '$rootScope', '$http', 'patientAttributeService', 'appService', 'patientService', 'spinner', '$location', 'ngDialog', '$window', '$state', '$document', '$translate', '$bahmniCookieStore',
-        function ($scope, $rootScope, $http, patientAttributeService, appService, patientService, spinner, $location, ngDialog, $window, $state, $document, $translate, $bahmniCookieStore) {
+    .controller('PatientCommonController', ['$scope', '$rootScope', '$http', 'patientAttributeService', 'appService', 'patientService', 'spinner', '$location', 'ngDialog', '$window', '$state', '$document', '$translate',
+        function ($scope, $rootScope, $http, patientAttributeService, appService, patientService, spinner, $location, ngDialog, $window, $state, $document, $translate) {
             var autoCompleteFields = appService.getAppDescriptor().getConfigValue("autoCompleteFields", []);
             var showCasteSameAsLastNameCheckbox = appService.getAppDescriptor().getConfigValue("showCasteSameAsLastNameCheckbox");
             var personAttributes = [];
@@ -390,48 +390,8 @@ angular.module('bahmni.registration')
                 });
             };
 
-            var getLoginLocation = function () {
-                var locationCookie = $bahmniCookieStore.get(Bahmni.Common.Constants.locationCookieName);
-            
-                if (locationCookie && locationCookie.uuid) {
-                    return {
-                        uuid: locationCookie.uuid,
-                        name: locationCookie.name
-                    };
-                }
-            
-                if ($rootScope.visitLocation) {
-                    return {
-                        uuid: $rootScope.visitLocation,
-                        name: null
-                    };
-                }
-            
-                return null;
-            };
-            
-
             $scope.$watch('patientLoaded', function () {
                 if ($scope.patientLoaded) {
-                    
-                    if (!$scope.patientLoaded) return;
-
-                    var loginLocation = getLoginLocation();
-                    if (!loginLocation) return;
-                
-                    // 🔑 Attribute name EXACTLY as configured in OpenMRS
-                    var attributeName = "loginLocation";
-                
-                    // Only auto-set if empty (don’t override edits)
-                    if (!$scope.patient[attributeName]) {
-                        $scope.patient[attributeName] = loginLocation.name;
-                    }
-                
-                    // console.log(
-                    //     "Auto-populated loginLocation attribute:",
-                    //     $scope.patient[attributeName]
-                    // );
-
                     executeShowOrHideRules();
                     if (!$scope.createPatient) {
                         if ($scope.patient.extraIdentifiers !== undefined) {
