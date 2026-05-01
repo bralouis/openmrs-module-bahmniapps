@@ -135,6 +135,35 @@ angular.module('bahmni.registration')
                     $location.path("/patient/" + patientData.patient.uuid + "/visit");
                 };
 
+                var getLoginLocation = function () {
+                    var locationCookie = $bahmniCookieStore.get(Bahmni.Common.Constants.locationCookieName);
+
+                    if (locationCookie && locationCookie.uuid) {
+                        return {
+                            uuid: locationCookie.uuid,
+                            name: locationCookie.name
+                        };
+                    }
+
+                    if ($rootScope.visitLocation) {
+                        return {
+                            uuid: $rootScope.visitLocation,
+                            name: null
+                        };
+                    }
+
+                    return null;
+                };
+
+                var loginLocation = getLoginLocation();
+                var loginLocationUuid = loginLocation ? loginLocation.uuid : null;
+
+                $scope.getLoginLocation = function () {
+                    return getLoginLocation().name;
+                };
+
+                $scope.loginlocations = $scope.getLoginLocation();
+
                 var isEmptyVisitLocation = function () {
                     return _.isEmpty($rootScope.visitLocation);
                 };
@@ -156,6 +185,15 @@ angular.module('bahmni.registration')
                         });
                         return;
                     }
+
+                    var patientLoginLocation = document.getElementById('loginLocation').value;
+                    var providerLoginLocation = $bahmniCookieStore.get(Bahmni.Common.Constants.locationCookieName);
+
+                    if (patientLoginLocation !== providerLoginLocation.name) {
+                        messagingService.showMessage("error", "Cannot start visit: Patient login location does not match your login location.");
+                        return; // stop here
+                    }
+
                     checkIfActiveVisitExists(patientProfileData).then(function (exists) {
                         if (exists) return messagingService.showMessage("error", "VISIT_OF_THIS_PATIENT_AT_SAME_LOCATION_EXISTS");
 

@@ -6,6 +6,19 @@ angular.module('bahmni.home')
             $scope.appExtensions = appService.getAppDescriptor().getExtensions($state.current.data.extensionPointId, "link") || [];
             $scope.selectedLocationUuid = {};
 
+            var hasChangeLocationPermission = function (currentUser) {
+                var hasPermission = false;
+                if (currentUser['privileges']) {
+                    for (var i = 0; i < currentUser['privileges'].length; i++) {
+                        if (currentUser['privileges'][i]['name'] === "Change Location") {
+                            hasPermission = true;
+                            break;
+                        }
+                    }
+                }
+                return hasPermission;
+            };
+
             var isOnline = function () {
                 return $window.navigator.onLine;
             };
@@ -28,6 +41,7 @@ angular.module('bahmni.home')
             };
 
             var init = function () {
+                $scope.hasChangeLocationPermission = hasChangeLocationPermission($scope.currentUser);
                 const loginLocations = localStorage.getItem("loginLocations");
                 if (loginLocations) {
                     $scope.locations = JSON.parse(loginLocations);
