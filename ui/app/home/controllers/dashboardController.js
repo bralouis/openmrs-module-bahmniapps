@@ -7,9 +7,9 @@ angular.module('bahmni.home')
             $scope.selectedLocationUuid = {};
 
             var hasChangeLocationPermission = function (currentUser) {
-                let hasPermission = false;
+                var hasPermission = false;
                 if (currentUser['privileges']) {
-                    for (let i = 0; i < currentUser['privileges'].length; i++) {
+                    for (var i = 0; i < currentUser['privileges'].length; i++) {
                         if (currentUser['privileges'][i]['name'] === "Change Location") {
                             hasPermission = true;
                             break;
