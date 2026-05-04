@@ -43,8 +43,7 @@ angular.module('bahmni.common.conceptSet')
                     if (obs.concept.conceptClass !== "Abnormal") {
                         if (obs.value && obs.value.name) {
                             obsValueList.push(obs.value.name);
-                        }
-                        else {
+                        } else {
                             obsValueList.push(obs.value);
                         }
                     }

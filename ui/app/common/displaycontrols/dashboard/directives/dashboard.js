@@ -33,7 +33,7 @@ angular.module('bahmni.common.displaycontrol.dashboard')
                     consultationMapper: new Bahmni.ConsultationMapper(configurations.dosageFrequencyConfig(), configurations.dosageInstructionConfig(),
                     configurations.consultationNoteConcept(), configurations.labOrderNotesConcept()),
                     editErrorMessage: $translate.instant('CLINICAL_FORM_ERRORS_MESSAGE_KEY'),
-                    showPrintOption: (dashboardConfig && dashboardConfig.printing) ? true : false
+                    showPrintOption: !!((dashboardConfig && dashboardConfig.printing))
                 };
                 $scope.formApi = {
                     handleEditSave: function (encounter) {

@@ -148,8 +148,7 @@ angular.module('bahmni.registration')
                 if (isMiddleNameFieldPresent) {
                     $scope.patient.givenName = name.givenName[0];
                     $scope.patient.middleName = name.givenName.length > 1 ? name.givenName[1] : "";
-                }
-                else {
+                } else {
                     $scope.patient.givenName = name.givenName.join(" ");
                 }
 
@@ -392,41 +391,39 @@ angular.module('bahmni.registration')
 
             var getLoginLocation = function () {
                 var locationCookie = $bahmniCookieStore.get(Bahmni.Common.Constants.locationCookieName);
-            
+
                 if (locationCookie && locationCookie.uuid) {
                     return {
                         uuid: locationCookie.uuid,
                         name: locationCookie.name
                     };
                 }
-            
+
                 if ($rootScope.visitLocation) {
                     return {
                         uuid: $rootScope.visitLocation,
                         name: null
                     };
                 }
-            
+
                 return null;
             };
-            
 
             $scope.$watch('patientLoaded', function () {
                 if ($scope.patientLoaded) {
-                    
                     if (!$scope.patientLoaded) return;
 
                     var loginLocation = getLoginLocation();
                     if (!loginLocation) return;
-                
+
                     // 🔑 Attribute name EXACTLY as configured in OpenMRS
                     var attributeName = "loginLocation";
-                
+
                     // Only auto-set if empty (don’t override edits)
                     if (!$scope.patient[attributeName]) {
                         $scope.patient[attributeName] = loginLocation.name;
                     }
-                
+
                     // console.log(
                     //     "Auto-populated loginLocation attribute:",
                     //     $scope.patient[attributeName]

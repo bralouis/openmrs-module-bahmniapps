@@ -265,8 +265,8 @@ angular.module('bahmni.clinical')
                 var configuredOptions = getConfiguredOptions();
                 return _.some(configuredOptions, function (option) {
                     return option.toLowerCase() === 'needsprint';
-                })
-                && !isOrderSaved;
+                }) &&
+                !isOrderSaved;
             };
             $scope.isUrgent = function () {
                 var configuredOptions = getConfiguredOptions();

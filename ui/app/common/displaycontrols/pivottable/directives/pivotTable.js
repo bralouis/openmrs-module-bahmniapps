@@ -38,7 +38,7 @@ angular.module('bahmni.common.displaycontrol.pivottable').directive('pivotTable'
                         return Bahmni.Common.Util.DateUtil.getDateInMonthsAndYears(value);
                     }
                     const number = Number.parseFloat(value);
-                    return number ? number : scope.isLonger(value) ? value.substring(0, 10) + "..." : value;
+                    return number || scope.isLonger(value) ? value.substring(0, 10) + "..." : value;
                 };
 
                 scope.scrollLeft = function () {
@@ -66,8 +66,7 @@ angular.module('bahmni.common.displaycontrol.pivottable').directive('pivotTable'
                             scrollLeft: '20000px' }, 500);
                         tablescroll = $('table.pivot-table tbody').scrollLeft();
                         clearInterval(checkIfPivotTableLoaded);
-                    }
-                    else if ($('table.pivot-table tbody tr').length < 12) {
+                    } else if ($('table.pivot-table tbody tr').length < 12) {
                         $('.btn-scroll-right, .btn-scroll-left').attr("disabled", true);
                         clearInterval(checkIfPivotTableLoaded);
                     }

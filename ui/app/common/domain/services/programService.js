@@ -108,7 +108,7 @@ angular.module('bahmni.common.domain')
 
         var getProgramRedirectionConfig = function () {
             var config = appService.getAppDescriptor().getConfigValue('programRedirection');
-            return config ? config : null;
+            return config || null;
         };
 
         var getEnrollmentInfoFor = function (patientUuid, representation) {

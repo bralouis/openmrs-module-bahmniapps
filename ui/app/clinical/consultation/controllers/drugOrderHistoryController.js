@@ -151,11 +151,9 @@ angular.module('bahmni.clinical')
                                 }
                                 if (diagnosis.codedAnswer !== null && diagnosis.codedAnswer.mappings.length !== 0) {
                                     diagnosesCodes += diagnosis.codedAnswer.mappings[0].code + " - " + diagnosis.codedAnswer.name;
-                                }
-                                else if (diagnosis.codedAnswer !== null && diagnosis.codedAnswer.mappings.length == 0) {
+                                } else if (diagnosis.codedAnswer !== null && diagnosis.codedAnswer.mappings.length == 0) {
                                     diagnosesCodes += diagnosis.codedAnswer.name;
-                                }
-                                else if (diagnosis.codedAnswer == null && diagnosis.freeTextAnswer !== null) {
+                                } else if (diagnosis.codedAnswer == null && diagnosis.freeTextAnswer !== null) {
                                     diagnosesCodes += diagnosis.freeTextAnswer;
                                 }
                             }

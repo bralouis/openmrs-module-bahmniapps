@@ -87,8 +87,8 @@ angular.module('bahmni.home')
             });
 
             var getLoginLocationUuid = function () {
-                return $bahmniCookieStore.get(Bahmni.Common.Constants.locationCookieName) ?
-                $bahmniCookieStore.get(Bahmni.Common.Constants.locationCookieName).uuid : null;
+                return $bahmniCookieStore.get(Bahmni.Common.Constants.locationCookieName)
+                ? $bahmniCookieStore.get(Bahmni.Common.Constants.locationCookieName).uuid : null;
             };
 
             var getLastLoggedinLocation = function () {

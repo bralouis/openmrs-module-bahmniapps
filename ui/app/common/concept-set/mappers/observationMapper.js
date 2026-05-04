@@ -18,8 +18,7 @@ Bahmni.ConceptSet.ObservationMapper = function () {
                     observationsForDisplay.push(obsToDisplay);
                     return;
                 }
-            }
-            else {
+            } else {
                 if (savedObs.concept.set) {
                     if (conceptSetConfig[savedObs.concept.name] && conceptSetConfig[savedObs.concept.name].grid) {
                         savedObs.value = self.getGridObservationDisplayValue(savedObs, conceptGroupFormatService);

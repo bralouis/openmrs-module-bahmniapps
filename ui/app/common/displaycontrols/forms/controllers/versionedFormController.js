@@ -146,7 +146,7 @@ angular.module('bahmni.common.displaycontrol.forms')
                         formType: $scope.section.type,
                         formDisplayName: $scope.getDisplayName(data)
                     },
-                    showPrintOption: $scope.section.dashboardConfig.printing ? true : false,
+                    showPrintOption: !!$scope.section.dashboardConfig.printing,
                     printForm: $scope.printForm
                 };
             };

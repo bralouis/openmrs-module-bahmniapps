@@ -68,7 +68,7 @@ angular.module('bahmni.clinical')
 
             $scope.showDoseFractions = treatmentConfig.inputOptionsConfig.showDoseFractions;
             $scope.isDoseFractionsAvailable = function () {
-                return $scope.doseFractions && !_.isEmpty($scope.doseFractions) ? true : false;
+                return !!($scope.doseFractions && !_.isEmpty($scope.doseFractions));
             };
 
             $scope.isRuleMode = function (treatment) {
@@ -676,7 +676,7 @@ angular.module('bahmni.clinical')
             };
 
             $scope.toggleDrugOrderAttribute = function (orderAttribute) {
-                orderAttribute.value = orderAttribute.value ? false : true;
+                orderAttribute.value = !orderAttribute.value;
             };
             contextChangeHandler.add(contextChange);
 
@@ -871,8 +871,8 @@ angular.module('bahmni.clinical')
 
             var showRulesInMedication = function (medicationConfig) {
                 $scope.showRulesInMedication = false;
-                if (medicationConfig !== 'undefined' && medicationConfig.tabConfig !== 'undefined' && medicationConfig.tabConfig.allMedicationTabConfig
-                    !== 'undefined' && medicationConfig.tabConfig.allMedicationTabConfig.orderSet !== 'undefined') {
+                if (medicationConfig !== 'undefined' && medicationConfig.tabConfig !== 'undefined' && medicationConfig.tabConfig.allMedicationTabConfig !==
+                    'undefined' && medicationConfig.tabConfig.allMedicationTabConfig.orderSet !== 'undefined') {
                     if (medicationConfig.tabConfig.allMedicationTabConfig.orderSet.showRulesInMedication) {
                         $scope.showRulesInMedication = true;
                     }
@@ -897,8 +897,8 @@ angular.module('bahmni.clinical')
 
             var setContinuousMedicationRoutes = function (medicationConfig) {
                 $scope.continuousMedicationRoutes = [];
-                if (medicationConfig && medicationConfig.tabConfig && medicationConfig.tabConfig.allMedicationTabConfig
-                    && medicationConfig.tabConfig.allMedicationTabConfig.inputOptionsConfig) {
+                if (medicationConfig && medicationConfig.tabConfig && medicationConfig.tabConfig.allMedicationTabConfig &&
+                    medicationConfig.tabConfig.allMedicationTabConfig.inputOptionsConfig) {
                     $scope.continuousMedicationRoutes = medicationConfig.tabConfig.allMedicationTabConfig.inputOptionsConfig.continuousMedicationRoutes || [];
                 }
             };
