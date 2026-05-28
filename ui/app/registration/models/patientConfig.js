@@ -46,7 +46,8 @@ Bahmni.Registration.PatientConfig = (function () {
                             translationKey: section.translationKey,
                             shortcutKey: section.shortcutKey,
                             order: section.order,
-                            canShow: true
+                            canShow: section.canShow !== undefined ? section.canShow : true,
+                            repeatable: section.repeatable || false
                         };
                     }
                     sectionObject.attributes.push(item);

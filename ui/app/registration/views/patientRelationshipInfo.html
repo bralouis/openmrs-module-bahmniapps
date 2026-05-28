@@ -1,0 +1,64 @@
+<div class="relationships-container form relationship-info-section">
+    <div class="new-relationship">
+        <div class="row relationship-info-header-row">
+            <div class="col col1 field-attribute showOn-desktop">
+                <label>Relationship Type</label>
+            </div>
+            <div class="col col2 field-attribute showOn-desktop">
+                <label>Contact(s)</label>
+            </div>
+            <div class="col col3 field-attribute showOn-desktop">
+                <label>Relationship Data</label>
+            </div>
+            <div class="col col4"></div>
+        </div>
+
+        <div class="row" ng-repeat="entry in patient.relationshipInfoList track by $index">
+            <div class="col col1 form-field">
+                <div class="field-attribute showOn-small-screen">
+                    <label>Relationship Type</label>
+                </div>
+                <div class="field-value">
+                    <select ng-model="entry.typeConceptUuid"
+                            ng-options="a.conceptId as a.description for a in relationshipAttribute.answers">
+                        <option value="">Select Type</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col col2 form-field">
+                <div class="field-attribute showOn-small-screen">
+                    <label>Contact(s)</label>
+                </div>
+                <div class="field-value">
+                    <input type="text" ng-model="entry.contacts" placeholder="Enter contact(s)" />
+                </div>
+            </div>
+
+            <div class="col col3 form-field">
+                <div class="field-attribute showOn-small-screen">
+                    <label>Relationship Data</label>
+                </div>
+                <div class="field-value">
+                    <input type="text" ng-model="entry.data" placeholder="Enter relationship data" />
+                </div>
+            </div>
+
+            <div class="col col4">
+                <button type="button" class="small-btn row-remover"
+                        ng-show="patient.relationshipInfoList.length > 1"
+                        ng-click="removeEntry($index)"
+                        title="Remove this entry">
+                    <span class="fa fa-remove"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="add-relationship-entry-wrapper" style="margin-top: 8px; padding-left: 2px;">
+        <button type="button" class="small-btn" ng-click="addEntry()" title="Add another relationship entry">
+            <i class="fa fa-plus"></i>
+        </button>
+        <span style="margin-left: 6px; font-size: 12px; color: #555;">Add Relationship Entry</span>
+    </div>
+</div>
