@@ -186,14 +186,26 @@
                       <a ng-if="::(section.title && !section.translationKey)" href>{{::'REGISTRATION_TITLE_ADDITIONAL_PATIENT' | translate}}</a>
                   </strong>
               </span>
+              <span ng-if="section.repeatable"
+                    ng-click="$event.stopPropagation(); section.expand = true; patient._addRelEntryRequest = (patient._addRelEntryRequest || 0) + 1"
+                    style="float:right; margin-right:8px; cursor:pointer;"
+                    title="Add Relationship Entry">
+                  <button type="button" class="small-btn" style="pointer-events:none;">
+                      <i class="fa fa-plus"></i>
+                  </button>
+              </span>
                 </legend>
                 <section class="form-field-inline clearfix" ng-show="section.expand">
-                    <article class="form-field" ng-repeat="attribute in ::section.attributes"
-                             ng-class="::{'right-form-field' : $index%2 != 0}">
-                        <attribute-types target-model="patient" attribute="::attribute" field-validation="::fieldValidation"
-                                         is-auto-complete="isAutoComplete" get-auto-complete-list="getAutoCompleteList"
-                                         get-data-results="getDataResults" is-read-only="isReadOnly" handle-update="handleUpdate"></attribute-types>
-                    </article>
+                    <div ng-if="!section.repeatable">
+                        <article class="form-field" ng-repeat="attribute in ::section.attributes"
+                                 ng-class="::{'right-form-field' : $index%2 != 0}">
+                            <attribute-types target-model="patient" attribute="::attribute" field-validation="::fieldValidation"
+                                             is-auto-complete="isAutoComplete" get-auto-complete-list="getAutoCompleteList"
+                                             get-data-results="getDataResults" is-read-only="isReadOnly" handle-update="handleUpdate"></attribute-types>
+                        </article>
+                    </div>
+                    <patient-relationship-info-section ng-if="section.repeatable" patient="patient">
+                    </patient-relationship-info-section>
                 </section>
             </div>
         </div>
