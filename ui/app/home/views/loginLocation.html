@@ -1,3 +1,17 @@
+<div class="access-denied-modal-overlay" ng-show="showAccessDeniedModal">
+    <div class="access-denied-modal">
+        <div class="access-denied-modal-header">
+            <span>{{'LOGIN_LOCATION_ACCESS_DENIED_TITLE_KEY' | translate}}</span>
+        </div>
+        <div class="access-denied-modal-body">
+            <p>{{'LOGIN_LOCATION_ACCESS_DENIED_MESSAGE_KEY' | translate}}</p>
+        </div>
+        <div class="access-denied-modal-footer">
+            <button class="confirm" ng-click="closeAccessDeniedModal()">{{'MESSAGE_DIALOG_OPTION_OKAY' | translate}}</button>
+        </div>
+    </div>
+</div>
+
 <div class="clint-logo-wrapper">
     <img class="implementor-logo" src={{logo}} >
     <span ng-if="titleText" class="title_text"> {{'LOGIN_LOCATION_PAGE_TITLE_TEXT' | translate }} </span>
@@ -44,5 +58,5 @@
 
 <div class="power-by">
     <img src="./../images/bahmniLogoFull.png" alt="Bahmni" />
-    <a href={{helpLink}}> Bahmni Help</a>
+    <a href={{helpLink}}>Mo-MENT eHealth</a>
 </div>
