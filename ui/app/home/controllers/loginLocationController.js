@@ -155,7 +155,7 @@ angular.module('bahmni.home')
 
                     // ✅ Check if user has privilege to access this location
                     if (!ensureLoginLocationPrivilege(currentUser, selectedLocation)) {
-                        $scope.errorMessageTranslateKey = "You do not have privilege to access this location.";
+                        $scope.showAccessDeniedModal = true;
                         logAuditForLoginAttempts("USER_LOGIN_LOCATION_FAILED", true);
                         deferrable.reject("Unauthorized location access");
                         return;
@@ -182,5 +182,9 @@ angular.module('bahmni.home')
                     if (data) return;
                     $location.url(landingPagePath);
                 });
+            };
+
+            $scope.closeAccessDeniedModal = function () {
+                $scope.showAccessDeniedModal = false;
             };
         }]);
